@@ -1,0 +1,25 @@
+var stream$ = Rx.Observable.create(function(observer) {
+	// observer - объект котрый возвращает стрим
+	// next -  тригер данных, принимает в себя данные, напоминает событие click
+	observer.next('One');
+
+	setTimeout(function() {
+		observer.next('Await 2000 s');
+		// закончить стрим форсированно
+		observer.complete();
+	}, 2000);
+
+	setTimeout(function() {
+		// форсированный вызов ошибки
+		observer.error('Error');
+	}, 2000);
+});
+
+/* подписка на стрим, принимает в себя 3 коллбэка
+* 1) Данные со стрима
+* 2) Ошибка
+* 3) Коллбэк после завершения стрима, работает только в случае форсированного завершения  complete()
+*/
+stream$.subscribe(function(data) {
+	console.log(data);
+});

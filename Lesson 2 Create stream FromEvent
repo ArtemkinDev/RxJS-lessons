@@ -1,0 +1,10 @@
+/*Создания стрима из события fromEvent() 
+* принимает 2 параматра:
+* 1 - эллемент события (эллемент из ДОМ дерева)
+* 2 - тип события
+*/
+var button$ = Rx.Observable.fromEvent(document.querySelector('button'), 'click');
+
+button$.subscribe(function(event){
+	console.log(event);
+});

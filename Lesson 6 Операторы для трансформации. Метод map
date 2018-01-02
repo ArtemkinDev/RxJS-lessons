@@ -1,0 +1,52 @@
+function createSubscribe(name) {
+	return {
+		next(x) {
+			console.log(name, ': ', x);
+		},
+		error(err) {
+			console.log('Error : ', x);
+		},
+		complete() {
+			console.log(name, ': completed');
+		},
+	}
+}
+
+
+/*
+ * Метод map() преобразует значения, обязательно нужно возвращать return
+ */
+
+/*
+Rx.Observable.of('hellow','world','wfm')
+	.map(x => x.toUpperCase())
+	.subscribe(createSubscribe('map'));*/
+
+	// 2 Input
+	/*let inp = document.querySelector('.input');
+	Rx.Observable.fromEvent(inp, 'keyup')
+	.map(x => x.target.value)
+	.map(x => x.toUpperCase())
+	.map(x => {
+		return {
+			value:x,
+			length:x.length
+		}
+	})
+	.subscribe(createSubscribe('map'));*/
+
+/*
+ * Метод pluck() позволяет доставать ключи из объекта
+ */
+
+ let inp = document.querySelector('.input');
+	Rx.Observable.fromEvent(inp, 'keyup')
+	.pluck('target','value')
+	.map(x => x.toUpperCase())
+	.map(x => {
+		return {
+			value:x,
+			length:x.length
+		}
+	})
+	.subscribe(createSubscribe('map'));

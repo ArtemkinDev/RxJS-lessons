@@ -1,0 +1,64 @@
+// 1.
+/*
+* Метод of() принимает любые простые данные
+*/
+/*Rx.Observable.of(5, 'fdf', [5,7,9,25])
+.subscribe(
+	function(x){
+		console.log(x)
+	},
+	function(error){
+		console.log(error)
+	},
+	function(){
+		console.log('Completed!')
+	}
+	);*/
+
+// Можно коллбэк подписки сделать функцией
+
+function createSubscribe(name) {
+	return {
+		next(x) {
+			console.log(name, ': ', x);
+		},
+		error(err) {
+			console.log('Error : ', x);
+		},
+		complete() {
+			console.log(name, ': completed');
+		},
+	}
+}
+/*Rx.Observable.of(5, 'fdf', [5,7,9,25])
+.subscribe(createSubscribe('of'));*/
+
+
+// 2.
+/*
+* Метод interval() создаёт(тригерит) данные через заданный промежуток времени
+*/
+
+/*Rx.Observable.interval(1000)
+.take(15) // указываем количество значений, которые нужно взять из интервала
+.subscribe(createSubscribe('interval'));*/
+
+//3 
+/*
+* Метод timer(delay, time)
+* delay - интервал на который нужно задержать выполнение 
+* time - периодичность с которой нужно выводить значения 
+*/
+
+/*Rx.Observable.timer(4000, 500)
+.take(5)
+.subscribe(createSubscribe('timer'));*/
+
+// 4
+/*
+* Метод range(from, total) - позволяет получить значения в заданном интервале
+* from - значение от которго нужно начать 
+* total - количество значений которые нужно получить
+*/
+Rx.Observable.range(5, 10)
+.subscribe(createSubscribe('range'));

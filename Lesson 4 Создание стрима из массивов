@@ -1,0 +1,30 @@
+
+function createSubscribe(name) {
+	return {
+		next(x) {
+			console.log(name, ': ', x);
+		},
+		error(err) {
+			console.log('Error : ', x);
+		},
+		complete() {
+			console.log(name, ': completed');
+		},
+	}
+}
+// 1
+/*
+* Метод from(arr) получает данные из массива
+*/
+/*Rx.Observable.from([5,8,7,51,'45',{name:'Ivan'}])
+.subscribe(createSubscribe('from'));*/
+
+// 2
+let set = new Set([5,8,7,51,'45',{name:'Set'}]);
+ Rx.Observable.from(set)
+.subscribe(createSubscribe('from'));
+
+// 3
+let map = new Map([[5,8],[7,51],{name:'Map'}]);
+ Rx.Observable.from(map)
+.subscribe(createSubscribe('from'));

@@ -1,0 +1,70 @@
+function createSubscribe(name) {
+	return {
+		next(x) {
+			console.log(name, ': ', x);
+		},
+		error(err) {
+			console.log('Error : ', x);
+		},
+		complete() {
+			console.log(name, ': completed');
+		},
+	}
+}
+
+
+/*
+* Метод defaultIfEmpty(value) метод на случай если в стриме нет данных
+* value - дефолтное значение
+*/
+
+
+Rx.Observable.of()
+.defaultIfEmpty('empty')
+.subscribe(createSubscribe('of'));
+
+
+
+/*
+* Метод every(cb) проверяет является ли каждый эллемент нашего стрима той или иной сущностью, возвращает true или false
+* 
+*/
+
+
+Rx.Observable.from([3,4,5])
+.every(x => x % 2 === 0)
+.subscribe(createSubscribe('every'));
+
+/*
+* Метод do(x) выполняет любые действия между операциями над данными
+* принима5ет эллемент стрима
+*/
+
+
+Rx.Observable.from([3,4,5])
+.do(x => console.log('Do do', x))
+.map(x => x*x)
+.do(x => console.log('Do do map', x))
+.subscribe(createSubscribe('do'));
+
+/*
+* Метод delay() позволяет задерживать стрим
+* 
+*/
+
+
+Rx.Observable.from([8,4,15])
+.map(x => x*x)
+.delay(2000)
+.subscribe(createSubscribe('do'));
+
+/*
+* Метод let() позволяет доставать observer из потока
+* 
+*/
+
+
+Rx.Observable.from([8,4,15])
+.map(x => x + x)
+.let(observer => observer.map(x => x * x))
+.subscribe(createSubscribe('let'));

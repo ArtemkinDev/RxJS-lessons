@@ -1,0 +1,53 @@
+function createSubscribe(name) {
+	return {
+		next(x) {
+			console.log(name, ': ', x);
+		},
+		error(err) {
+			console.log('Error : ', x);
+		},
+		complete() {
+			console.log(name, ': completed');
+		},
+	}
+}
+
+
+/*
+* Метод buffer(time) нужен для хранения данных в буфере в течении указанного времени
+* time - Rx.Observable.interval(...)
+*/
+
+
+Rx.Observable.interval(500)
+	.buffer(Rx.Observable.interval(2000))
+	.take(3)
+	.subscribe(createSubscribe('buffer'));
+
+/*
+* Метод bufferTime(time) нужен для хранения данных в буфере в течении указанного времени
+* time -ms
+*/
+
+
+Rx.Observable.interval(500)
+	.bufferTime(2000)
+	.take(3)
+	.subscribe(createSubscribe('buffer'));
+
+/*
+* Метод bufferCount(number) нужен для хранения данных в буфере в определенном количестве
+* number -number
+*/
+
+Rx.Observable.range(0,40)
+	.bufferCount(5)
+	.subscribe(createSubscribe('bufferCount'));
+
+/*
+* Сохраним количесвто секунд между кликами в буфере
+*/
+Rx.Observable.interval(1000)
+	.buffer(Rx.Observable.fromEvent(document,'click'))
+	.map(x => x.length)
+	.subscribe(createSubscribe('Click buffer'));

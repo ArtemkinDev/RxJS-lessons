@@ -1,0 +1,83 @@
+function createSubscribe(name) {
+	return {
+		next(x) {
+			console.log(name, ': ', x);
+		},
+		error(err) {
+			console.log('Error : ', x);
+		},
+		complete() {
+			console.log(name, ': completed');
+		},
+	}
+}
+
+
+/*
+* Метод first() забирает первое значение из стрима
+* Метод last() забирает последнее значение из стрима
+*/
+
+
+Rx.Observable.of(1,5,'hellow','world','wfm')
+	.last()
+	.subscribe(createSubscribe('first'));
+
+/*
+* Метод find(x => x === 5) ищет данные в стриме
+* x - текущее значение из стрима
+* функция поиска
+* Метод findIndex(x => x === 5) возвращает индекс искомого (вернет 1)
+*/
+
+Rx.Observable.of(1,5,'hellow','world','wfm')
+.find(x => x === 5)
+.subscribe(createSubscribe('first'));
+
+/*
+* Метод skip(x) указываем количество значений, которые необходимо пропустить до начала стрима  
+*/
+
+Rx.Observable.of(1,5,'hellow','world','wfm')
+.skip(2)
+.subscribe(createSubscribe('first'));
+
+/*
+* Метод skipWhile(fn) принимает функцию коллбэк,которая обрабатывает текущее значение стрима 
+* например,мы хотим ПРОПУСТИТЬ только числа (пример нижу) 
+*/
+
+Rx.Observable.of(1,5,'hellow','world','wfm')
+.skipWhile(x => {
+		return typeof x === 'number';
+	})
+.subscribe(createSubscribe('first'));
+
+/*
+* Метод takeWhile(fn) принимает функцию коллбэк,которая обрабатывает текущее значение стрима и забирает данные,пока не выполнится условие
+* например, 
+*/
+
+Rx.Observable.interval(1000)
+.takeWhile(x => {
+		return x < 13; // забирает значения,пока х меньше 13
+	})
+.subscribe(createSubscribe('first'));
+
+/*
+* Метод skipUntil(timer), timer - Rx.Observable.timer(time). Пропускаем значения,пока не сработает таймер
+* например, 
+*/
+
+Rx.Observable.interval(1000)
+.skipUntil(Rx.Observable.timer(3000))
+.subscribe(createSubscribe('first'));
+
+/*
+* Метод takeUntil(timer), timer - Rx.Observable.timer(time). Получает значения,пока не сработает таймер
+* например, 
+*/
+
+Rx.Observable.interval(1000)
+.takeUntil(Rx.Observable.timer(3000))
+.subscribe(createSubscribe('first'));

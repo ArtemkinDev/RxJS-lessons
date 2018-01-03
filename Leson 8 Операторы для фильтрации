@@ -1,0 +1,87 @@
+function createSubscribe(name) {
+	return {
+		next(x) {
+			console.log(name, ': ', x);
+		},
+		error(err) {
+			console.log('Error : ', x);
+		},
+		complete() {
+			console.log(name, ': completed');
+		},
+	}
+}
+
+
+/*
+* Метод filter() фильтрует стрим
+*/
+
+/*
+Rx.Observable.range(0,10)
+	.filter(x => x > 3) // забрать все значения больше 3
+	.subscribe(createSubscribe('filter'));
+	*/
+
+
+	const cars = [
+	{
+		name:'audi',
+		price:500
+	},
+	{
+		name:'BMW',
+		price:1500
+	},
+	{
+		name:'ford',
+		price:800
+	},
+	{
+		name:'mersedec',
+		price:5500
+	}
+	];
+	
+
+	Rx.Observable.fromEvent(document.querySelector('.input'), 'keyup')
+	.map(e => e.target.value)
+	.subscribe(x => {
+		Rx.Observable.from(cars)
+		.filter(car => {
+			return car.name === x;
+		})
+		.subscribe(v => {
+			document.querySelector('div').innerHTML = `<h2>${v.name.toUpperCase()}</h2><h4>${v.price}</h4>`;
+		});
+	});
+
+
+
+/*
+* Метод debounceTime(time) ждёт пока завершится event, и после через интервал time продолжает выполнение (срабатывает подписка)
+*/
+Rx.Observable.fromEvent(document.querySelector('.input'), 'keyup')
+	.map(e => e.target.value)
+	.debounceTime(1500)
+	.subscribe(createSubscribe('debounceTime'));
+
+/*
+* Метод distinct() позволяет защититься от ненужных запросов на сервер,
+* например если в поле ввода текст не изменился, а мы нажимаем на стрелки, то запрос не будет уходить
+*/
+
+Rx.Observable.fromEvent(document.querySelector('.input'), 'keyup')
+	.map(e => e.target.value)
+	.distinct()
+	.subscribe(createSubscribe('debounceTime'));
+
+/*
+* Метод distinctUntilChanged() позволяет отфильтровать данные только по уникальным,неповторяющимся
+* например, будут выведены данные с масива только 1 раз, без повторов(1,5,7)
+*/
+
+
+Rx.Observable.from([1,5,8,25,7,9,1,1,1,5,5,5,5,7,7])
+	.distinctUntilChanged()
+	.subscribe(createSubscribe('from'));

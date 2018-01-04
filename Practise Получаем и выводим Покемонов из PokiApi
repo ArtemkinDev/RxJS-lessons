@@ -1,0 +1,65 @@
+HTML
+__________________________________
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+	<input type="text">
+	<h1></h1>
+	<dl>
+		<dt>Name:</dt>
+		<dd class="name"></dd>
+		<dt>Weight:</dt>
+		<dd class="weight"></dd>
+		<dt>Height:</dt>
+		<dd class="height"></dd>
+		<dt>Expirience:</dt>
+		<dd class="expirience"></dd>
+	</dl>
+
+	<script src="node_modules/rxjs/bundles/Rx.min.js"></script>
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="main.js"></script>
+</body>
+</html>
+
+
+JS
+____________________________________
+function getUserById(id) {
+
+	return $.ajax({
+		url: ("https://pokeapi.co/api/v2/pokemon/" + id),
+		type: 'GET',
+		dataType: 'JSON',
+	}).promise();
+}
+
+Rx.Observable.fromEvent($('input'), 'keyup')
+	.pluck('target', 'value')
+	.distinct()
+	.debounceTime(2000)
+	.mergeMap(x => {
+		return Rx.Observable.fromPromise(getUserById(x));
+	})
+	.catch(error => Rx.Observable.of(error))
+	.subscribe(
+		(poki) => {
+			$('h1').html(poki.name);
+			$('.name').html(poki.name);
+			$('.weight').html(poki.weight);
+			$('.height').html(poki.height);
+			$('.expirience').html(poki.base_experience);
+			console.log(poki)
+		},
+		(err) => {
+			console.log('Error');
+		},
+		() => {
+			console.log('completed');
+		}
+	);

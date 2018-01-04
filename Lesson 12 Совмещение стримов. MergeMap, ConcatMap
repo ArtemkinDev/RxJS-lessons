@@ -1,0 +1,63 @@
+function createSubscribe(name) {
+	return {
+		next(x) {
+			console.log(name, ': ', x);
+		},
+		error(err) {
+			console.log('Error : ', x);
+		},
+		complete() {
+			console.log(name, ': completed');
+		},
+	}
+}
+
+/*
+* Неправильно использовать 2 подписки, как в примере ниже
+*/
+
+/*Rx.Observable.of('Hellow') 
+.subscribe(x => {
+	Rx.Observable.of(x + ' World')
+	.subscribe(createSubscribe('MergeMap'));
+});*/
+
+/*
+* mergeMap(cb) вернёт новый стрим из другого стрима
+*/
+
+Rx.Observable.of('Hellow') 
+.mergeMap(x => {
+	return Rx.Observable.of(x + ' World');
+})
+.subscribe(createSubscribe('MergeMap'));
+
+
+// mergeMap с промисами
+
+const promise = (data) => {
+	return new Promise((resolve, reject) => {
+		setTimeout(()=>{
+			resolve(data + ' WBF');
+		},2000)
+	})
+}
+
+Rx.Observable.of('Hellow!')
+.mergeMap(x => {
+	return promise(x);
+})
+.subscribe(createSubscribe('MergeMap Promise'));
+
+/*
+* concatMap(cb(x,i)) вернёт новый стрим
+* х - эллемент стрима, i - индекс
+*/
+
+Rx.Observable.range(1,10)
+.concatMap((x, i) => {
+	return Rx.Observable.interval(100)
+	.take(x)
+	.map(q => i)
+})
+.subscribe(createSubscribe('concatMap'));

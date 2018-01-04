@@ -1,0 +1,35 @@
+function createSubscribe(name) {
+	return {
+		next(x) {
+			console.log(name, ': ', x);
+		},
+		error(err) {
+			console.log('Error : ', x);
+		},
+		complete() {
+			console.log(name, ': completed');
+		},
+	}
+}
+
+/*
+* Искусственно создать ошибку throw()
+*/
+/*
+Rx.Observable.throw(new Error('Some error!'))
+.catch(error => Rx.Observable.of(error))
+.subscribe(createSubscribe('Catch'));
+
+Rx.Observable.interval(1000).take(5).subscribe(x => console.log(x));*/
+
+/*
+* onErrorResumeNext(stream) - в случае ошибки запускает другой стрим или коллбэк
+* https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/onerrorresumenext.md
+*/
+
+const s1$ = Rx.Observable.throw(new Error('Some error!'));
+const s2$ = Rx.Observable.interval(1000).take(5);
+const s3$ = Rx.Observable.of('Server is dead!');
+
+s1$.onErrorResumeNext(s3$)
+.subscribe(createSubscribe('onErrorResumeNext'));

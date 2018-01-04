@@ -1,0 +1,84 @@
+function createSubscribe(name) {
+	return {
+		next(x) {
+			console.log(name, ': ', x);
+		},
+		error(err) {
+			console.log('Error : ', x);
+		},
+		complete() {
+			console.log(name, ': completed');
+		},
+	}
+}
+
+/*
+* Класс Subject() - может как подписываться на изменения, так их и создавать/эмитить
+*/
+/*
+const subject$ = new Rx.Subject();
+
+subject$.subscribe(createSubscribe('Subject'));
+
+subject$.next(1);
+subject$.next(2);
+
+setTimeout(() => {
+subject$.next(3);
+subject$.complete(); // завершает подписку
+}, 2000);*/
+
+
+/*const subject$ = new Rx.Subject();
+const int$ = new Rx.Observable.interval(1000);
+
+int$.subscribe(subject$);
+
+subject$
+.take(5)
+.subscribe(createSubscribe('subject 1'));
+
+subject$
+.take(2)
+.subscribe(createSubscribe('subject 2'));*/
+
+/*
+* Класс BehaviorSubject() - то же что и subject, но может принимать в себя изначальное значение
+*/
+
+/*const subject$ = new Rx.BehaviorSubject('some string');
+
+subject$.subscribe(createSubscribe('behavior'));
+
+subject$.next(54);
+subject$.complete();*/
+
+
+/*
+* Класс ReplaySubject(number) - можем передваать в конструктор передаем число, максимальное количество тригеров
+*/
+
+/*const subject$ = new Rx.ReplaySubject(2);
+
+subject$.next(1);
+subject$.next(2);
+subject$.next(3);
+subject$.complete();
+
+subject$.subscribe(createSubscribe('behavior'));*/
+
+/*
+* Класс AsyncSubject(number) - позволяет работать с асинхронными данными
+* в случае,если не завершаем стрим, то ничего не возвращается
+* забирает только последние данные
+*/
+
+const subject$ = new Rx.AsyncSubject();
+
+subject$.next(1);
+subject$.next(2);
+subject$.next(3);
+subject$.complete(); // завершение стрима
+
+subject$.subscribe(createSubscribe('AsyncSubject'));
+
